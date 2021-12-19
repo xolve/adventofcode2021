@@ -7,13 +7,16 @@ import scala.annotation.tailrec
 object BinaryDiagnostic {
   import scala.collection.SortedMap
 
-  def countsAtAllPos(lines: Iterator[String]): SortedMap[Int, Map[Char, Int]] = {
+  def countsAtAllPos(
+      lines: Iterator[String]
+  ): SortedMap[Int, Map[Char, Int]] = {
     import scala.collection.mutable
     val indexedMaps = mutable.Map[Int, mutable.Map[Char, Int]]()
     lines
       .foreach { line =>
         line.zipWithIndex.foreach { (c, i) =>
-          val mapAtIndex = indexedMaps.getOrElseUpdate(i, mutable.Map() withDefaultValue 0)
+          val mapAtIndex =
+            indexedMaps.getOrElseUpdate(i, mutable.Map() withDefaultValue 0)
           mapAtIndex.addOne(c -> (mapAtIndex(c) + 1))
         }
       }
@@ -32,25 +35,32 @@ object BinaryDiagnostic {
 
   def part1(lines: Iterator[String]): Int = {
     val counts = BinaryDiagnostic.countsAtAllPos(lines)
-    val gammaRate = Integer.parseInt(counts.map((_, m) => majority(m)).mkString, 2)
-    val epsilonRate = Integer.parseInt(counts.map((_, m) => minority(m)).mkString, 2)
+    val gammaRate =
+      Integer.parseInt(counts.map((_, m) => majority(m)).mkString, 2)
+    val epsilonRate =
+      Integer.parseInt(counts.map((_, m) => minority(m)).mkString, 2)
     gammaRate * epsilonRate
   }
 
   @tailrec
-  def countAndKeep(lines: Seq[String], index: Int)(votingFunc: Map[Char, Int] => Char): String = {
+  def countAndKeep(lines: Seq[String], index: Int)(
+      votingFunc: Map[Char, Int] => Char
+  ): String = {
     if lines.length == 1 then {
       lines.head
     } else {
       import scala.collection.mutable
 
       val counts = mutable.Map[Char, Int]() withDefaultValue 0
-      lines.map(_.charAt(index)).foreach(c => {
-        counts.addOne(c -> (counts(c) + 1))
-      })
+      lines
+        .map(_.charAt(index))
+        .foreach(c => {
+          counts.addOne(c -> (counts(c) + 1))
+        })
 
       val selectedMajority = votingFunc(counts.toMap)
-      val nextLines = lines.filter(line => line.charAt(index) == selectedMajority)
+      val nextLines =
+        lines.filter(line => line.charAt(index) == selectedMajority)
       countAndKeep(nextLines, index + 1)(votingFunc)
     }
   }

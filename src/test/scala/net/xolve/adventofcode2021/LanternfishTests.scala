@@ -4,7 +4,7 @@ import net.xolve.net.xolve.basetest.UnitSpec
 
 class LanternfishTests extends UnitSpec {
 
-  import Lanternfish._
+  import Lanternfish.*
 
   "Fish" should {
     "produce another fish" when {
@@ -21,7 +21,7 @@ class LanternfishTests extends UnitSpec {
         fish.timer shouldBe 0
 
         val expectedNewFish = fish.increment()
-        expectedNewFish.value shouldBe a [Fish]
+        expectedNewFish.value shouldBe a[Fish]
         expectedNewFish.value.timer shouldBe 8
         fish.timer shouldBe 6
       }

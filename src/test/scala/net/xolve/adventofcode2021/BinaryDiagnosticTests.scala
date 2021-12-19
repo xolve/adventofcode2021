@@ -33,7 +33,7 @@ class BinaryDiagnosticTests extends UnitSpec {
           4 -> Map('a' -> 1),
           5 -> Map('a' -> 1),
           6 -> Map('b' -> 1),
-          7 -> Map('c' -> 1),
+          7 -> Map('c' -> 1)
         )
         BinaryDiagnostic.countsAtAllPos(lines.iterator) shouldBe expected
       }
@@ -44,7 +44,7 @@ class BinaryDiagnosticTests extends UnitSpec {
           1 -> Map('0' -> 7, '1' -> 5),
           2 -> Map('0' -> 4, '1' -> 8),
           3 -> Map('0' -> 5, '1' -> 7),
-          4 -> Map('0' -> 7, '1' -> 5),
+          4 -> Map('0' -> 7, '1' -> 5)
         )
         BinaryDiagnostic.countsAtAllPos(lines.iterator) shouldBe expected
       }
@@ -88,11 +88,15 @@ class BinaryDiagnosticTests extends UnitSpec {
   "countAndKeep" should {
     "return correct answer" when {
       "majority selection" in {
-        BinaryDiagnostic.countAndKeep(lines, 0)(BinaryDiagnostic.majority) shouldBe "10111"
+        BinaryDiagnostic.countAndKeep(lines, 0)(
+          BinaryDiagnostic.majority
+        ) shouldBe "10111"
       }
 
       "minority selection" in {
-        BinaryDiagnostic.countAndKeep(lines, 0)(BinaryDiagnostic.minority) shouldBe "01010"
+        BinaryDiagnostic.countAndKeep(lines, 0)(
+          BinaryDiagnostic.minority
+        ) shouldBe "01010"
       }
     }
   }

@@ -14,20 +14,20 @@ object Dive {
   def parseLIne(line: String): Command = {
     line match {
       case s"forward $value" => Command.Forward(value.toInt)
-      case s"up $value" => Command.Up(value.toInt)
-      case s"down $value" => Command.Down(value.toInt)
+      case s"up $value"      => Command.Up(value.toInt)
+      case s"down $value"    => Command.Down(value.toInt)
       case _ => throw new IllegalArgumentException(s"Unknown command $line.")
     }
   }
 
   def positionEvaluator(commands: Iterator[Command]): (Int, Int) = {
     commands
-      .foldLeft((0, 0)) ((pos, cmd) => {
+      .foldLeft((0, 0))((pos, cmd) => {
         val (h, d) = pos
         cmd match {
           case Command.Forward(value) => (h + value, d)
-          case Command.Up(value) => (h, d - value)
-          case Command.Down(value) => (h, d + value)
+          case Command.Up(value)      => (h, d - value)
+          case Command.Down(value)    => (h, d + value)
         }
       })
   }
@@ -39,12 +39,12 @@ object Dive {
 
   def aimEvaluator(commands: Iterator[Command]): (Int, Int, Int) = {
     commands
-      .foldLeft((0, 0, 0)) ((pos, cmd) => {
+      .foldLeft((0, 0, 0))((pos, cmd) => {
         val (h, d, a) = pos
         cmd match {
           case Command.Forward(value) => (h + value, d + (a * value), a)
-          case Command.Up(value) => (h, d, a - value)
-          case Command.Down(value) => (h, d, a + value)
+          case Command.Up(value)      => (h, d, a - value)
+          case Command.Down(value)    => (h, d, a + value)
         }
       })
   }

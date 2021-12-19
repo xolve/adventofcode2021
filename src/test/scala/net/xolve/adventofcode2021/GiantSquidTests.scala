@@ -17,7 +17,7 @@ class GiantSquidTests extends UnitSpec {
     Array(8, 2, 23, 4, 24),
     Array(21, 9, 14, 16, 7),
     Array(6, 10, 3, 18, 5),
-    Array(1, 12, 20, 15, 19),
+    Array(1, 12, 20, 15, 19)
   )
 
   "BingoBoard" should {

@@ -7,6 +7,45 @@ import javax.management.ValueExp
 
 object GiantSquid {
 
+  def main(args: Array[String]): Unit = {
+    println(part1())
+    println(part2())
+  }
+
+  def part1(): Int = {
+    val (randomNumbers, boards) = parseInputFile("src/resources/input_day4.txt")
+    var crossedBoard: Option[BingoBoard] = None
+    val crossingNum = randomNumbers.find(num => {
+      crossedBoard = boards.find(_.markAndCheck(num))
+      crossedBoard.isDefined
+    })
+
+    (crossedBoard, crossingNum) match {
+      case (Some(board), Some(num)) =>
+        board.matrix.map(_.filterNot(_.crossed).map(_.value).sum).sum * num
+      case _ => throw new Exception("No rows or columns crossed :-(")
+    }
+  }
+
+  def part2(): Int = {
+    val (randomNumbers, boards) = parseInputFile("src/resources/input_day4.txt")
+    var crossedBoardNum: Option[(BingoBoard, Int)] = None
+    randomNumbers.foreach(num => {
+      boards
+        .filterNot(b => b.crossedRow || b.crossedCol)
+        .map(b => (b, num, b.markAndCheck(num)))
+        .findLast(_._3)
+        .map(t => (t._1, t._2))
+        .foreach(bn => crossedBoardNum = Some(bn))
+    })
+
+    crossedBoardNum match {
+      case Some(board, num) =>
+        board.matrix.map(_.filterNot(_.crossed).map(_.value).sum).sum * num
+      case _ => throw new Exception("No rows or columns crossed :-(")
+    }
+  }
+
   def parseInputFile(filePath: String): (Seq[Int], Seq[BingoBoard]) = {
     import scala.collection.mutable
     import scala.io.Source
@@ -20,7 +59,7 @@ object GiantSquid {
 
       val boards = mutable.ListBuffer[BingoBoard]()
 
-      while (lineIterator.hasNext) {
+      while lineIterator.hasNext do {
         val lines = lineIterator.takeWhile(_.nonEmpty).toSeq
         require(lines.length == 5, s"${lines}")
         boards addOne new BingoBoard(lines)
@@ -66,60 +105,24 @@ object GiantSquid {
     def markCell(value: Int): Unit = {
       matrix foreach { row =>
         row foreach { cell =>
-          if cell.value == value then cell.crossed = true
+          if cell.value == value then { cell.crossed = true }
         }
       }
+    }
+
+    override def toString: String = {
+      matrix
+        .map(row => row.map(cell => cell.toString).mkString(" "))
+        .mkString("\n")
     }
 
     case class Cell(value: Int) {
       var crossed: Boolean = false
 
       override def toString: String = {
-        if crossed then String.format("%2s", "X") else String.format("%2d", value)
+        if crossed then { String.format("%2s", "X") }
+        else { String.format("%2d", value) }
       }
     }
-
-    override def toString: String = {
-      matrix.map(row =>
-        row.map(cell => cell.toString).mkString(" ")
-      ).mkString("\n")
-    }
-  }
-
-  def part1(): Int = {
-    val (randomNumbers, boards) = parseInputFile("src/resources/input_day4.txt")
-    var crossedBoard: Option[BingoBoard] = None
-    val crossingNum = randomNumbers.find(num => {
-      crossedBoard = boards.find(_.markAndCheck(num))
-      crossedBoard.isDefined
-    })
-
-    (crossedBoard, crossingNum) match {
-      case (Some(board), Some(num)) => board.matrix.map(_.filterNot(_.crossed).map(_.value).sum).sum * num
-      case _ => throw new Exception("No rows or columns crossed :-(")
-    }
-  }
-
-  def part2(): Int = {
-    val (randomNumbers, boards) = parseInputFile("src/resources/input_day4.txt")
-    var crossedBoardNum: Option[(BingoBoard, Int)] = None
-    randomNumbers.foreach(num => {
-      boards
-        .filterNot(b => b.crossedRow || b.crossedCol)
-        .map(b => (b, num, b.markAndCheck(num)))
-        .findLast(_._3)
-        .map(t => (t._1, t._2))
-        .foreach(bn => crossedBoardNum = Some(bn))
-    })
-
-    crossedBoardNum match {
-      case Some(board, num) => board.matrix.map(_.filterNot(_.crossed).map(_.value).sum).sum * num
-      case _ => throw new Exception("No rows or columns crossed :-(")
-    }
-  }
-
-  def main(args: Array[String]): Unit = {
-    println(part1())
-    println(part2())
   }
 }

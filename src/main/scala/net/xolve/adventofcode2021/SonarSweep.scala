@@ -7,13 +7,15 @@ object SonarSweep {
   import scala.io.Source
   import scala.util.Using
 
-  def countIncreases(depths: Iterator[Int]): Int = {
-    depths.sliding(2).count(x => x(1) > x(0))
-  }
-
   def part1(): Int = {
     Using(Source.fromFile("src/resources/input_day1.txt")) { f =>
       countIncreases(f.getLines().map(_.toInt))
+    }.get
+  }
+
+  def part2(): Int = {
+    Using(Source.fromFile("src/resources/input_day1.txt")) { f =>
+      sumKIncreases(f.getLines().map(_.toInt), 3)
     }.get
   }
 
@@ -21,10 +23,8 @@ object SonarSweep {
     countIncreases(depths.sliding(k).map(_.sum))
   }
 
-  def part2(): Int = {
-    Using(Source.fromFile("src/resources/input_day1.txt")) { f =>
-      sumKIncreases(f.getLines().map(_.toInt), 3)
-    }.get
+  def countIncreases(depths: Iterator[Int]): Int = {
+    depths.sliding(2).count(x => x(1) > x(0))
   }
 }
 

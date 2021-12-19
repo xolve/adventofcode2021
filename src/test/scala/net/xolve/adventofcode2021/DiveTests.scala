@@ -5,19 +5,19 @@ import net.xolve.net.xolve.basetest.UnitSpec
 
 class DiveTests extends UnitSpec {
   "parseLine" when {
-    "forward command" should  {
+    "forward command" should {
       "parse" in {
         Dive.parseLIne("forward 190") shouldBe Dive.Command.Forward(190)
       }
     }
 
-    "up command" should  {
+    "up command" should {
       "parse" in {
         Dive.parseLIne("up 10") shouldBe Dive.Command.Up(10)
       }
     }
 
-    "down command" should  {
+    "down command" should {
       "parse" in {
         Dive.parseLIne("down 9") shouldBe Dive.Command.Down(9)
       }
@@ -40,7 +40,7 @@ class DiveTests extends UnitSpec {
         Command.Forward(8),
         Command.Up(3),
         Command.Down(8),
-        Command.Forward(2),
+        Command.Forward(2)
       )
 
       Dive.positionEvaluator(commands.iterator) shouldBe (15, 10)
@@ -55,7 +55,7 @@ class DiveTests extends UnitSpec {
         Command.Forward(8),
         Command.Up(3),
         Command.Down(8),
-        Command.Forward(2),
+        Command.Forward(2)
       )
 
       Dive.aimEvaluator(commands.iterator) shouldBe (15, 60, 10)

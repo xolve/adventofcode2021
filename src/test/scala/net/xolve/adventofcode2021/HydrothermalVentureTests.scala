@@ -4,7 +4,7 @@ import net.xolve.net.xolve.basetest.UnitSpec
 
 class HydrothermalVentureTests extends UnitSpec {
 
-  import HydrothermalVenture._
+  import HydrothermalVenture.*
 
   "part1" should {
     "return correct answer" when {
@@ -19,9 +19,8 @@ class HydrothermalVentureTests extends UnitSpec {
       }
 
       "one crossing line" in {
-        val lines = Seq(
-          Line(Point(5, 0), Point(5, 10)),
-          Line(Point(3, 2), Point(12, 2)))
+        val lines =
+          Seq(Line(Point(5, 0), Point(5, 10)), Line(Point(3, 2), Point(12, 2)))
         HydrothermalVenture.part1(lines) shouldBe 1
       }
 
@@ -29,7 +28,8 @@ class HydrothermalVentureTests extends UnitSpec {
         val lines = Seq(
           Line(Point(5, 0), Point(5, 10)),
           Line(Point(3, 2), Point(12, 2)),
-          Line(Point(2, 2), Point(10, 10)))
+          Line(Point(2, 2), Point(10, 10))
+        )
         HydrothermalVenture.part1(lines) shouldBe 1
       }
     }

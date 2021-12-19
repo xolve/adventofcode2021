@@ -6,26 +6,16 @@ import scala.collection.mutable.ListBuffer
 
 object Lanternfish {
 
-  class Fish(initTimer: Int) {
-    require(initTimer >= 0 && initTimer <= 8)
-
-    private var _timer = initTimer
-    def timer: Int = _timer
-    private def timer_=(timer: Int): Unit = {
-      this._timer = timer
+  def main(args: Array[String]): Unit = {
+    {
+      val fishes = parseInputFile("src/resources/input_day6.txt")
+      println(part1(fishes, 80).length)
     }
 
-    def increment(): Option[Fish] = {
-      val t = timer - 1
-      if t == -1 then
-        this.timer = 6
-        Some(new Fish(8))
-      else
-        timer = t
-        None
+    {
+      val fishes = parseInputFile("src/resources/input_day6.txt").map(_.timer)
+      println(part2(fishes, 256))
     }
-
-    override def toString: String = s"Fish($timer)"
   }
 
   def parseInputFile(fileName: String): Seq[Fish] = {
@@ -44,43 +34,59 @@ object Lanternfish {
   def part1(fishes: Seq[Fish], increments: Int): Seq[Fish] = {
     import scala.collection.mutable
 
-    val fishesMut = (0 until increments).foldLeft(new ListBuffer[Fish] ++ fishes) { (fl, _) =>
-      val newFishes = fl.flatMap(_.increment())
-      fl :++ newFishes
-    }
+    val fishesMut =
+      (0 until increments).foldLeft(new ListBuffer[Fish] ++ fishes) { (fl, _) =>
+        val newFishes = fl.flatMap(_.increment())
+        fl :++ newFishes
+      }
     fishesMut.toSeq
   }
 
   def part2(fishes: Seq[Int], increments: Int): Long = {
     import scala.collection.mutable
 
-    val initialCounts: Map[Int, Long] = fishes.groupBy(i => i).map((k, v) => k -> v.length.toLong).toMap
+    val initialCounts: Map[Int, Long] =
+      fishes.groupBy(i => i).map((k, v) => k -> v.length.toLong).toMap
 
-    val finalCounts = (0 until increments).foldLeft(initialCounts) { (fishesByTimerCounts, _) =>
-      val newCounts = new mutable.HashMap[Int, Long] withDefaultValue 0
-      fishesByTimerCounts.foreach((timer, count) =>
-        if timer == 0 then {
-          newCounts += (6 -> (newCounts(6) + count))
-          newCounts += (8 -> (newCounts(8) + count))
-        } else {
-          newCounts += ((timer - 1) -> (newCounts(timer - 1) + count))
-        }
-      )
-      newCounts.toMap
+    val finalCounts = (0 until increments).foldLeft(initialCounts) {
+      (fishesByTimerCounts, _) =>
+        val newCounts = new mutable.HashMap[Int, Long] withDefaultValue 0
+        fishesByTimerCounts.foreach((timer, count) =>
+          if (timer == 0) then {
+            newCounts += (6 -> (newCounts(6) + count))
+            newCounts += (8 -> (newCounts(8) + count))
+          } else {
+            newCounts += ((timer - 1) -> (newCounts(timer - 1) + count))
+          }
+        )
+        newCounts.toMap
     }
 
     finalCounts.values.sum
   }
 
-  def main(args: Array[String]): Unit = {
-    {
-      val fishes = parseInputFile("src/resources/input_day6.txt")
-      println(part1(fishes, 80).length)
+  class Fish(initTimer: Int) {
+    require(initTimer >= 0 && initTimer <= 8)
+
+    private var _timer = initTimer
+
+    def increment(): Option[Fish] = {
+      val t = timer - 1
+      if t == -1 then {
+        this.timer = 6
+        Some(new Fish(8))
+      } else {
+        timer = t
+        None
+      }
     }
 
-    {
-      val fishes = parseInputFile("src/resources/input_day6.txt").map(_.timer)
-      println(part2(fishes, 256))
+    override def toString: String = s"Fish($timer)"
+
+    def timer: Int = _timer
+
+    private def timer_=(timer: Int): Unit = {
+      this._timer = timer
     }
   }
 
