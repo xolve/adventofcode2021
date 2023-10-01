@@ -8,7 +8,7 @@ object TheTreacheryOfWhales {
     import scala.io.Source
     import scala.util.Using
 
-    val numbers = Using(Source.fromFile("src/resources/input_day7.txt")) { f =>
+      val numbers = Using(Source.fromFile("src/resources/input_day7.txt")) { f =>
       f.getLines().next().split(",").map(_.toInt).toSeq
     }.get
 
